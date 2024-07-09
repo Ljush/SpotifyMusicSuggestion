@@ -40,8 +40,9 @@ li a:hover:not(.active) {
     </head>
     <body>
         <ul>
-            <li><a class="active" href="{{ url_for('menu') }}">Menu</a></li>
-            <!-- <li><a href="{{ url_for('listening_history') }}">Listening History</a></li> -->
+            <li><a href="{{ url_for('menu') }}">Menu</a></li>
+            <li><a class="active" href="{{ url_for('listening_history') }}">Listening History</a></li>
+            <li><a href="{{ url_for('listening_history') }}">Listening History</a></li>
             <li><a href="{{ url_for('top_tracks') }}">Top Tracks</a></li>
             <li><a href="{{ url_for('top_artists') }}">Top Artists</a></li>
             <li><a href="{{ url_for('track_suggestion') }}">Music Recommendations</a></li>

@@ -10,6 +10,7 @@ import sys
 from dotenv import load_dotenv
 import os
 import random
+import logging
 
 load_dotenv()  # This loads the variables from the .env file into the environment
 SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
@@ -193,7 +194,7 @@ def display_listening_history():
     except Exception as e:
         logging.error(f"General error: {e}", exc_info=True)
         return jsonify(error=f"An error occurred: {str(e)}"), 500
-        
+
 @app.route('/toptracks', methods = ['GET'])
 def top_tracks():
     return render_template('topTracks.html')

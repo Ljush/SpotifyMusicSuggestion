@@ -176,26 +176,23 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 #     tracks = userPlayback(numOfTracks)
 #     return render_template('displayListeningHistory.html', tracks=tracks)#, jsonify(tracks)
 def display_listening_history():
-    try:
-        numOfTracks = request.args.get('numOfTracks', type=int)
-        logging.info(f"Number of Tracks requested: {numOfTracks}")
+    numOfTracks = request.args.get('numOfTracks', type=int)
+    logging.info(f"Number of Tracks requested: {numOfTracks}")
 
-        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
-                                                       client_secret=SPOTIPY_CLIENT_SECRET,
-                                                       redirect_uri=SPOTIPY_REDIRECT_URI,
-                                                       scope='user-read-recently-played'))
-        results = sp.current_user_recently_played(limit=numOfTracks)
-        logging.info(f"Spotify Results: {results}")
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
+                                                   client_secret=SPOTIPY_CLIENT_SECRET,
+                                                   redirect_uri=SPOTIPY_REDIRECT_URI,
+                                                   scope='user-read-recently-played'))
+    logging.info("Spotify client initialized successfully")
+    
+    results = sp.current_user_recently_played(limit=numOfTracks)
+    logging.info(f"Spotify Results: {results}")
 
-        tracks = [{'track_number': i+1, 'track_name': item['track']['name'], 'artist_name': item['track']['artists'][0]['name']} 
-                  for i, item in enumerate(results['items'])]
-        return render_template('displayListeningHistory.html', tracks=tracks)
-    except spotipy.SpotifyException as e:
-        logging.error(f"Spotify API error: {e}", exc_info=True)
-        return jsonify(error=f"Spotify API error: {e}"), 500
-    except Exception as e:
-        logging.error(f"General error: {e}", exc_info=True)
-        return jsonify(error=f"An error occurred: {str(e)}"), 500
+    tracks = [{'track_number': i+1, 'track_name': item['track']['name'], 'artist_name': item['track']['artists'][0]['name']} 
+              for i, item in enumerate(results['items'])]
+    logging.info(f"Tracks prepared for rendering: {tracks}")
+    
+    return render_template('displayListeningHistory.html', tracks=tracks)
 
 @app.route('/toptracks', methods = ['GET'])
 def top_tracks():

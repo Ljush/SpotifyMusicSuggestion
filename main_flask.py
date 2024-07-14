@@ -10,7 +10,6 @@ import sys
 from dotenv import load_dotenv
 import os
 import random
-import logging
 
 load_dotenv()  # This loads the variables from the .env file into the environment
 SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
@@ -167,32 +166,12 @@ def menu():
 def listening_history():
     return render_template('listeningHistory.html')
 
-# configure logging 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @app.route('/displayListeningHistory', methods=['GET'])
-# def display_listening_history():
-#     numOfTracks = request.args.get('numOfTracks', type=int)
-#     tracks = userPlayback(numOfTracks)
-#     return render_template('displayListeningHistory.html', tracks=tracks)#, jsonify(tracks)
 def display_listening_history():
     numOfTracks = request.args.get('numOfTracks', type=int)
-    logging.info(f"Number of Tracks requested: {numOfTracks}")
-
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
-                                                   client_secret=SPOTIPY_CLIENT_SECRET,
-                                                   redirect_uri=SPOTIPY_REDIRECT_URI,
-                                                   scope='user-read-recently-played'))
-    logging.info("Spotify client initialized successfully")
-    
-    results = sp.current_user_recently_played(limit=numOfTracks)
-    logging.info(f"Spotify Results: {results}")
-
-    tracks = [{'track_number': i+1, 'track_name': item['track']['name'], 'artist_name': item['track']['artists'][0]['name']} 
-              for i, item in enumerate(results['items'])]
-    logging.info(f"Tracks prepared for rendering: {tracks}")
-    
-    return render_template('displayListeningHistory.html', tracks=tracks)
+    tracks = userPlayback(numOfTracks)
+    return render_template('displayListeningHistory.html', tracks=tracks)#, jsonify(tracks)
 
 @app.route('/toptracks', methods = ['GET'])
 def top_tracks():

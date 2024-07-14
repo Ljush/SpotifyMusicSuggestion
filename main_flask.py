@@ -167,6 +167,8 @@ def menu():
 def listening_history():
     return render_template('listeningHistory.html')
 
+# configure logging 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @app.route('/displayListeningHistory', methods=['GET'])
 # def display_listening_history():

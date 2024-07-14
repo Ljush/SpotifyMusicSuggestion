@@ -153,7 +153,9 @@ def trackSuggestion(numOfTracks, time_range):
     return trackDetails
 
 
-app = Flask(__name__)
+if __name__ == '__main__':
+    app.run(debug=False)  # Ensure debug is set to False for production
+
 
 
 @app.route('/', methods = ['GET','POST'])
